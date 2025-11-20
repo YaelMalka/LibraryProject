@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Library.Core.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Xml.Linq;
 
@@ -10,24 +11,24 @@ namespace Libary.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IDataContext _dataContext;
-        public BookController(IDataContext Context)
+        private readonly IBookService _bookService;
+        public BookController(IBookService Context)
         {
-            _dataContext = Context;
+            _bookService = Context;
         }
         // GET: api/<LibaryController>
         [HttpGet]
         public IEnumerable<Book> Get()
         {
-            return _dataContext.books;
+            return _bookService.GetBooks();
         }
 
         // GET api/<LibaryController>/5
         [HttpGet("{id}")]
         public Book Get(int id)
         {
-            var index= _dataContext.books.FindIndex(x => x.Id==id);
-            return _dataContext.books[index];
+            var index= _bookService.GetBooks().FindIndex(x => x.Id==id);
+            return _bookService.GetBooks()[index];
         }
         //[HttpGet("{name}")]
         //public Book Get(string nameBook)
@@ -40,16 +41,17 @@ namespace Libary.Controllers
         [HttpPost]
         public void Post([FromBody] Book value)
         {
-            _dataContext.books.Add(value);
+            _bookService.GetBooks().Add(value);
         }
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Book value)
+        public ActionResult Put(int id, [FromBody] Book value)
         {
-            var index = _dataContext.books.FindIndex(x => x.Id == id);
-            _dataContext.books[index].Genre = value.Genre;
-            _dataContext.books[index].IsAvailable = value.IsAvailable;
+            var index = _bookService.GetBooks().FindIndex(x => x.Id == id);
+            _bookService.GetBooks()[index].Genre = value.Genre;
+            _bookService.GetBooks()[index].IsAvailable = value.IsAvailable;
+            //לסיים לפי עדכון
             
         }
 
@@ -57,8 +59,8 @@ namespace Libary.Controllers
             [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var index = _dataContext.books.Find(x => x.Id == id);
-            _dataContext.books.Remove(index);
+            var index = _bookService.GetBooks().Find(x => x.Id == id);
+            _bookService.GetBooks().Remove(index);
         }
     }
 }

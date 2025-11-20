@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Library.Core.Services;
+using Microsoft.AspNetCore.Mvc;
 using static System.Reflection.Metadata.BlobBuilder;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,32 +10,32 @@ namespace Libary.Controllers
     [ApiController]
     public class BorrowController : ControllerBase
     {
-        private readonly IDataContext _dataContext;
-        public BorrowController(IDataContext Context)
+        private readonly IBorrowService  _borrowService;
+        public BorrowController(IBorrowService Context)
         {
-            _dataContext = Context;
+            _borrowService = Context;
         }
 
         // GET: api/<KategoryController>
         [HttpGet]
         public IEnumerable<Borrow> Get()
         {
-            return _dataContext.borrows;
+            return _borrowService.GetBorrow();
         }
 
         // GET api/<KategoryController>/5
         [HttpGet("{idBook}")]//בדיקת ספר מסוים
         public Borrow Get(int idBook)
         {
-            var index = _dataContext.borrows.FindIndex(x => x.BookId == idBook);
-            return _dataContext.borrows[index];
+            var index = _borrowService.GetBorrow().FindIndex(x => x.BookId == idBook);
+            return _borrowService.GetBorrow()[index];
         }
 
         // POST api/<KategoryController>
         [HttpPost]
         public void Post([FromBody] Borrow value)
         {
-            _dataContext.borrows.Add(value);
+            _borrowService.GetBorrow().Add(value);
         }
 
         // PUT api/<KategoryController>/5
@@ -48,8 +49,8 @@ namespace Libary.Controllers
         [HttpDelete("{id}")]
         public void Delete(int idBook)
         {
-            var index = _dataContext.borrows.Find(x => x.BookId == idBook);
-            _dataContext.borrows.Remove(index);
+            var index = _borrowService.GetBorrow().Find(x => x.BookId == idBook);
+            _borrowService.GetBorrow().Remove(index);
         }
     
     }

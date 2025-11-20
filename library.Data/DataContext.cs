@@ -2,7 +2,7 @@
 
 namespace Libary
 {
-    public class DataContext:IDataContext
+    public class DataContext
     {
         public List<Book> books { get; set; }
         public List<Borrow> borrows { get; set; }

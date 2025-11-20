@@ -33,5 +33,11 @@ namespace Library.Services
         {
             return _BookRepository.GetById(id);
         }
+        public void Update(int id,Book b)
+        {
+            var value = _BookRepository.GetById(id);
+            value.Genre=b.Genre;
+            value.IsAvailable=b.IsAvailable;
+        }
     }
 }

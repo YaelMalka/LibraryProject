@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Library.Core.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,24 +10,24 @@ namespace Libary.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly IDataContext _dataContext;
-        public CustomerController(IDataContext Context)
+        private readonly ICustomerService _customerService;
+        public CustomerController(ICustomerService Context)
         {
-            _dataContext = Context;
+            _customerService = Context;
         }
 
         // GET: api/<LibaryController>
         [HttpGet]
         public IEnumerable<Customer> Get()
         {
-            return _dataContext.customers;
+            return _customerService.GetCustomer();
         }
 
         // GET api/<LibaryController>/5
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
-            var customer = _dataContext.customers.Find(e => e.Id == id);
+            var customer = _customerService.GetCustomer().Find(e => e.Id == id);
             if (customer == null) {
                 return NotFound();
             }
@@ -37,12 +38,12 @@ namespace Libary.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Customer value)
         {
-            var customer = _dataContext.customers.Find(x => x.Id == value.Id);
+            var customer = _customerService.GetById(value.Id);  
             if (customer != null)
             {
                 return Conflict(); // BadRequest
             }
-            _dataContext.customers.Add(value);         
+            _customerService.GetCustomer().Add(value);         
             return Ok(value);
 
            
@@ -50,13 +51,18 @@ namespace Libary.Controllers
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Customer value)
+        public ActionResult Put(int id, [FromBody] Customer value)
         {          
-            var index = _dataContext.customers.FindIndex(e => e.Id == id);
-            _dataContext.customers[index].Birthday = value.Birthday;
-            _dataContext.customers[index].Name = value.Name;
-            _dataContext.customers[index].NumBooks = value.NumBooks;
-            _dataContext.customers[index].Address = value.Address;
+            //לסיים עדכון
+            var index = _customerService.GetCustomer().FindIndex(e => e.Id == id);
+            if (index < 0)
+            {
+                return NotFound();
+            }
+            _customerService.GetCustomer()[index].Birthday = value.Birthday;
+            _customerService.GetCustomer()[index].Name = value.Name;
+            _customerService.GetCustomer()[index].NumBooks = value.NumBooks;
+            _customerService.GetCustomer()[index].Address = value.Address;
            
         }
 
@@ -64,8 +70,8 @@ namespace Libary.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var index = _dataContext.customers.Find(e => e.Id == id);
-            _dataContext.customers.Remove(index);
+            var index = _customerService.GetCustomer().Find(e => e.Id == id);
+            _customerService.GetCustomer().Remove(index);
         }
     }
 }
