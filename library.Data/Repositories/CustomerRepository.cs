@@ -17,6 +17,12 @@ namespace Library.Data.Repositories
             _context = context;
         }
 
+        public Customer DeleteCustomer(int id)
+        {
+            return _context.customers.Find(x => x.Id == id);
+            
+        }
+
         public Customer GetByBirthday(DateTime birthday)
         {
             return _context.customers.Find(x => x.Birthday == birthday);
@@ -31,5 +37,7 @@ namespace Library.Data.Repositories
         {
             return _context.customers;
         }
+
+      
     }
 }

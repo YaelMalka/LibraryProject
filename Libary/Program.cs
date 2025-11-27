@@ -1,4 +1,8 @@
 using Libary;
+using Library.Core.Repositories;
+using Library.Core.Services;
+using Library.Data.Repositories;
+using Library.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +13,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddSingleton<IDataContext, DataContext>();
+builder.Services.AddScoped<IBorrowRepository, BorrowRepository>();
+builder.Services.AddScoped<IBorrowService,BorrowService>();
+
+builder.Services.AddScoped <IBookRepository, BookRepository>();
+builder.Services.AddScoped <IBookService, BookService>();
+
+builder.Services.AddScoped <ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped <ICustomerService, CustomerService>();  
+
+builder.Services.AddSingleton<DataContext>();
 
 var app = builder.Build();
 

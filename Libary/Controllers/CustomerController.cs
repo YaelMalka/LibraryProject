@@ -18,9 +18,9 @@ namespace Libary.Controllers
 
         // GET: api/<LibaryController>
         [HttpGet]
-        public IEnumerable<Customer> Get()
+        public ActionResult Get()
         {
-            return _customerService.GetCustomer();
+            return Ok(_customerService.GetCustomer());
         }
 
         // GET api/<LibaryController>/5
@@ -53,7 +53,7 @@ namespace Libary.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Customer value)
         {          
-            //לסיים עדכון
+           //?????
             var index = _customerService.GetCustomer().FindIndex(e => e.Id == id);
             if (index < 0)
             {
@@ -63,15 +63,19 @@ namespace Libary.Controllers
             _customerService.GetCustomer()[index].Name = value.Name;
             _customerService.GetCustomer()[index].NumBooks = value.NumBooks;
             _customerService.GetCustomer()[index].Address = value.Address;
-           
+           return Ok(index);
         }
 
         // DELETE api/<LibaryController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var index = _customerService.GetCustomer().Find(e => e.Id == id);
-            _customerService.GetCustomer().Remove(index);
+           var cust= _customerService.DeleteCustomer(id);
+            if (cust == null)
+            {
+                return NotFound();
+            }          
+            return Ok(cust);
         }
     }
 }

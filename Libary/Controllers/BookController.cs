@@ -1,4 +1,5 @@
 ﻿using Library.Core.Services;
+using Library.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Xml.Linq;
@@ -27,7 +28,7 @@ namespace Libary.Controllers
         [HttpGet("{id}")]
         public Book Get(int id)
         {
-            var index= _bookService.GetBooks().FindIndex(x => x.Id==id);
+            var index = _bookService.GetBooks().FindIndex(x => x.Id == id);
             return _bookService.GetBooks()[index];
         }
         //[HttpGet("{name}")]
@@ -39,24 +40,29 @@ namespace Libary.Controllers
 
         // POST api/<LibaryController>
         [HttpPost]
-        public void Post([FromBody] Book value)
+        public ActionResult Post([FromBody] Book value)
         {
+            var book = _bookService.GetById(value.Id);
+            if (book != null)
+            {
+                return Conflict(); // BadRequest
+            }
             _bookService.GetBooks().Add(value);
+            return Ok(value);
         }
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Book value)
+        public void Put(int id, [FromBody] Book value)
         {
-            var index = _bookService.GetBooks().FindIndex(x => x.Id == id);
-            _bookService.GetBooks()[index].Genre = value.Genre;
-            _bookService.GetBooks()[index].IsAvailable = value.IsAvailable;
-            //לסיים לפי עדכון
-            
+            var index = _bookService.GetById(id);
+           index.Genre = value.Genre;
+            index.IsAvailable = value.IsAvailable;
+
         }
 
-            // DELETE api/<LibaryController>/5
-            [HttpDelete("{id}")]
+        // DELETE api/<LibaryController>/5
+        [HttpDelete("{id}")]
         public void Delete(int id)
         {
             var index = _bookService.GetBooks().Find(x => x.Id == id);

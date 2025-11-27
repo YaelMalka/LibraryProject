@@ -1,4 +1,5 @@
 ﻿using Library.Core.Services;
+using Library.Services;
 using Microsoft.AspNetCore.Mvc;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -33,9 +34,15 @@ namespace Libary.Controllers
 
         // POST api/<KategoryController>
         [HttpPost]
-        public void Post([FromBody] Borrow value)
+        public ActionResult Post([FromBody] Borrow value)
         {
+            var borrow = _borrowService.GetBorrowByBookId(value.BookId);
+            if (borrow != null)
+            {
+                return Conflict(); // BadRequest
+            }
             _borrowService.GetBorrow().Add(value);
+            return Ok(value);        
         }
 
         // PUT api/<KategoryController>/5

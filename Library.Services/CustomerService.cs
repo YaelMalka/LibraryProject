@@ -32,5 +32,20 @@ namespace Library.Services
         {
             return _customerRepository.GetCustomer();
         }
+        public bool DeleteCustomer(Customer customer)
+        {
+            if (customer == null)
+                return false;
+            return true;
+        }
+
+        public Customer DeleteCustomer(int id)
+        {
+            var cust = _customerRepository.DeleteCustomer(id);
+            if (cust != null)
+                _customerRepository.GetCustomer().Remove(cust);
+            return cust;
+           
+        }
     }
 }
