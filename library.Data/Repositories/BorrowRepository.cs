@@ -22,14 +22,34 @@ namespace Library.Data.Repositories
             return _context.borrows;
         }
 
-        public Borrow GetByBorrowDate(DateTime date)
-        {
-            return _context.borrows.Find(x => x.BorrowDate == date);
-        }
-
         public Borrow GetBorrowByBookId(int id)
         {
             return _context.borrows.Find(x => x.BookId == id);
+        }
+
+        public Borrow DeleteBorrow(int bookId)
+        {
+            var b = GetBorrowByBookId(bookId);
+            _context.borrows.Remove(b);
+            return b;
+        }
+
+        public Borrow UpdateBorrow(int bookId, int customerId)
+        {
+            Borrow b = GetBorrowByBookId(bookId);
+            b.BookId = bookId;
+            b.CustomerId = customerId;
+            return b;
+        }
+
+        public bool AddBorrow(Borrow b)
+        {
+            if (GetBorrowByBookId(b.BookId) == null)
+            {
+                _context.borrows.Add(b);
+               return true;
+            }
+            return false;
         }
     }
 }

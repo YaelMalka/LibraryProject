@@ -19,17 +19,21 @@ namespace Libary.Controllers
         }
         // GET: api/<LibaryController>
         [HttpGet]
-        public IEnumerable<Book> Get()
+        public ActionResult<Book> Get()
         {
-            return _bookService.GetBooks();
+            return Ok(_bookService.GetBooks());
         }
 
         // GET api/<LibaryController>/5
         [HttpGet("{id}")]
-        public Book Get(int id)
+        public ActionResult Get(int id)
         {
-            var index = _bookService.GetBooks().FindIndex(x => x.Id == id);
-            return _bookService.GetBooks()[index];
+            var b = _bookService.GetById(id);
+            if (b == null)
+            {
+                return NotFound();
+            }
+            return Ok(b);
         }
         //[HttpGet("{name}")]
         //public Book Get(string nameBook)
@@ -42,31 +46,32 @@ namespace Libary.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Book value)
         {
-            var book = _bookService.GetById(value.Id);
-            if (book != null)
+            if (_bookService.AddBook(value))
             {
-                return Conflict(); // BadRequest
+                return Ok();
             }
-            _bookService.GetBooks().Add(value);
-            return Ok(value);
+            return NotFound();
         }
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Book value)
+        public ActionResult Put(int id, [FromBody] Book value)
         {
-            var index = _bookService.GetById(id);
-           index.Genre = value.Genre;
-            index.IsAvailable = value.IsAvailable;
+            var b = _bookService.UpdateBook(id, value.IsAvailable);
+            if (b == null)
+                return NotFound();
+            return Ok(b);
 
         }
 
         // DELETE api/<LibaryController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var index = _bookService.GetBooks().Find(x => x.Id == id);
-            _bookService.GetBooks().Remove(index);
+            var b= _bookService.DeleteBook(id); 
+            if(b == null)
+                return NotFound();
+            return Ok(b);
         }
     }
 }

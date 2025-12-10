@@ -17,6 +17,23 @@ namespace Library.Data.Repositories
             _context = context;
         }
 
+        public bool AddBook(Book b)
+        {
+            if(GetById(b.Id)==null)
+            {
+                _context.books.Add(b);  
+                return true;
+            }
+            return false;
+        }
+
+        public Book DeleteBook(int bookId)
+        {
+            var b = GetById(bookId);
+            _context.books.Remove(b);
+            return b;
+        }
+
         public List<Book> GetBooks()
         {
            return _context.books;
@@ -30,6 +47,13 @@ namespace Library.Data.Repositories
         public Book GetById(int id)
         {
             return _context.books.Find(s => s.Id == id);
+        }
+
+        public Book UpdateBook(int bookId, bool available)
+        {
+            Book b = GetById(bookId);
+            b.IsAvailable = available;
+            return b;             
         }
     }
 }

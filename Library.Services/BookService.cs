@@ -18,9 +18,18 @@ namespace Library.Services
             _BookRepository = bookRepository;
         }
 
+        public bool AddBook(Book b)
+        {
+            return _BookRepository.AddBook(b);
+        }
+
+        public Book DeleteBook(int bookId)
+        {
+            return _BookRepository.DeleteBook(bookId);
+        }
+
         public List<Book> GetBooks()
         {
-            //חישובים
            return _BookRepository.GetBooks();
         }
 
@@ -33,11 +42,10 @@ namespace Library.Services
         {
             return _BookRepository.GetById(id);
         }
-        public void Update(int id,Book b)
+
+        public Book UpdateBook(int bookId, bool available)
         {
-            var value = _BookRepository.GetById(id);
-            value.Genre=b.Genre;
-            value.IsAvailable=b.IsAvailable;
+            return _BookRepository.UpdateBook(bookId, available);
         }
     }
 }

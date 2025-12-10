@@ -10,7 +10,9 @@ namespace Library.Core.Repositories
     public  interface IBorrowRepository
     {
         public List<Borrow> GetBorrow();
-        public Borrow GetByBorrowDate(DateTime date);
         public Borrow GetBorrowByBookId(int id);
+        public Borrow DeleteBorrow(int bookId);
+        public Borrow UpdateBorrow(int bookId, int customerId);
+        public bool AddBorrow(Borrow b);
     }
 }

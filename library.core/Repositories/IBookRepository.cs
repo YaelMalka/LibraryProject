@@ -13,5 +13,8 @@ namespace Library.Core.Repositories
 
         public Book GetById(int id);
         public Book GetByAuthor(string author);
+        public Book DeleteBook(int bookId);
+        public Book UpdateBook(int bookId, bool available);
+        public bool AddBook(Book b);
     }
 }

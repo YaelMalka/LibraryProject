@@ -13,5 +13,7 @@ namespace Library.Core.Repositories
         public Customer GetById(int id);
         public Customer GetByBirthday(DateTime birthday);
         public Customer DeleteCustomer(int id);
+        public Customer UpdateCustomer(int id, int numBook, string add);
+        public bool AddCustomer(Customer c);
     }
 }

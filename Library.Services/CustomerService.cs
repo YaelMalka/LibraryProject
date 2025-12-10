@@ -20,32 +20,41 @@ namespace Library.Services
 
         public Customer GetByBirthday(DateTime birthday)
         {
-           return _customerRepository.GetByBirthday(birthday);
+            return _customerRepository.GetByBirthday(birthday);
         }
 
         public Customer GetById(int id)
         {
-           return _customerRepository.GetById(id);
+            return _customerRepository.GetById(id);
         }
 
         public List<Customer> GetCustomer()
         {
             return _customerRepository.GetCustomer();
         }
-        public bool DeleteCustomer(Customer customer)
-        {
-            if (customer == null)
-                return false;
-            return true;
-        }
 
         public Customer DeleteCustomer(int id)
         {
-            var cust = _customerRepository.DeleteCustomer(id);
-            if (cust != null)
-                _customerRepository.GetCustomer().Remove(cust);
-            return cust;
-           
+            //var cust = GetById(id); 
+            //if(cust!=null)
+            return _customerRepository.DeleteCustomer(id);
+
+        }
+
+        public Customer UpdateCustomer(int id, int numBook, string add)
+        {
+            return _customerRepository.UpdateCustomer(id, numBook, add);
+        }
+
+        public bool AddCustomer(Customer c)
+        {
+            var customer = GetById(c.Id);
+            if (customer== null)
+            {
+                _customerRepository.AddCustomer(c);
+                return true;
+            }
+            return false;
         }
     }
 }

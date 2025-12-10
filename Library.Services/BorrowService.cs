@@ -23,14 +23,32 @@ namespace Library.Services
            return _borrowRepository.GetBorrow();
         }
 
-        public Borrow GetByBorrowDate(DateTime d)
-        {
-            return _borrowRepository.GetByBorrowDate(d);
-        }
-
         public Borrow GetBorrowByBookId(int id)
         {
             return _borrowRepository.GetBorrowByBookId(id);
+        }
+
+        public Borrow DeleteBorrow(int bookId)
+        {
+            return _borrowRepository.DeleteBorrow(bookId);
+        }
+
+        public Borrow UpdateBorrow(int bookId, int customerId)
+        {
+           return _borrowRepository.UpdateBorrow(bookId, customerId);
+        }
+
+        public bool AddBorrow(Borrow b)
+        {
+            var borrow =GetBorrowByBookId(b.BookId);
+            if (borrow == null)
+            {
+                _borrowRepository.AddBorrow(b);
+                return true;
+            }
+            return false;
+           
+             
         }
     }
 }

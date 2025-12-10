@@ -27,7 +27,7 @@ namespace Libary.Controllers
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
-            var customer = _customerService.GetCustomer().Find(e => e.Id == id);
+            var customer = _customerService.GetById(id);
             if (customer == null) {
                 return NotFound();
             }
@@ -38,38 +38,30 @@ namespace Libary.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Customer value)
         {
-            var customer = _customerService.GetById(value.Id);  
-            if (customer != null)
+            bool ans = _customerService.AddCustomer(value);  
+            if (!ans)
             {
                 return Conflict(); // BadRequest
-            }
-            _customerService.GetCustomer().Add(value);         
-            return Ok(value);
-
-           
+            }     
+            return Ok(value);         
         }
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Customer value)
-        {          
-           //?????
-            var index = _customerService.GetCustomer().FindIndex(e => e.Id == id);
-            if (index < 0)
+        {     
+            var cust = _customerService.UpdateCustomer(id, value.NumBooks, value.Address);
+            if (cust ==null)
             {
                 return NotFound();
-            }
-            _customerService.GetCustomer()[index].Birthday = value.Birthday;
-            _customerService.GetCustomer()[index].Name = value.Name;
-            _customerService.GetCustomer()[index].NumBooks = value.NumBooks;
-            _customerService.GetCustomer()[index].Address = value.Address;
-           return Ok(index);
+            }          
+           return Ok(cust);
         }
 
         // DELETE api/<LibaryController>/5
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
-        {
+        {         
            var cust= _customerService.DeleteCustomer(id);
             if (cust == null)
             {

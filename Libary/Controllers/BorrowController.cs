@@ -19,29 +19,31 @@ namespace Libary.Controllers
 
         // GET: api/<KategoryController>
         [HttpGet]
-        public IEnumerable<Borrow> Get()
+        public ActionResult<Borrow> Get()
         {
-            return _borrowService.GetBorrow();
+            return Ok( _borrowService.GetBorrow());
         }
 
         // GET api/<KategoryController>/5
         [HttpGet("{idBook}")]//בדיקת ספר מסוים
-        public Borrow Get(int idBook)
+        public ActionResult Get(int idBook)
         {
-            var index = _borrowService.GetBorrow().FindIndex(x => x.BookId == idBook);
-            return _borrowService.GetBorrow()[index];
+            var book = _borrowService.GetBorrowByBookId(idBook);
+            if(book==null)
+                return NotFound();
+
+            return Ok(book);
         }
 
         // POST api/<KategoryController>
         [HttpPost]
         public ActionResult Post([FromBody] Borrow value)
         {
-            var borrow = _borrowService.GetBorrowByBookId(value.BookId);
-            if (borrow != null)
+            bool ans = _borrowService.AddBorrow(value);
+            if (!ans)
             {
                 return Conflict(); // BadRequest
             }
-            _borrowService.GetBorrow().Add(value);
             return Ok(value);        
         }
 
@@ -53,11 +55,15 @@ namespace Libary.Controllers
         //}
 
         // DELETE api/<KategoryController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int idBook)
+        [HttpDelete("{idbook}")]
+        public ActionResult Delete(int idbook)
         {
-            var index = _borrowService.GetBorrow().Find(x => x.BookId == idBook);
-            _borrowService.GetBorrow().Remove(index);
+            var b = _borrowService.DeleteBorrow(idbook);
+            if (b == null)
+            {
+                return NotFound();
+            }
+            return Ok(b);         
         }
     
     }

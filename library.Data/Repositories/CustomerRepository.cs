@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.Data.Repositories
 {
-    public class CustomerRepository:ICustomerRepository
+    public class CustomerRepository : ICustomerRepository
     {
         private readonly DataContext _context;
 
@@ -17,10 +17,23 @@ namespace Library.Data.Repositories
             _context = context;
         }
 
+        public bool AddCustomer(Customer c)
+        {
+            if (GetById(c.Id) == null)
+            {
+                _context.customers.Add(c);
+                return true;
+            }
+            return false;
+        }
+
         public Customer DeleteCustomer(int id)
         {
-            return _context.customers.Find(x => x.Id == id);
-            
+            var cust = GetById(id);
+            if (cust != null)
+                _context.customers.Remove(cust);
+            return cust;
+
         }
 
         public Customer GetByBirthday(DateTime birthday)
@@ -38,6 +51,12 @@ namespace Library.Data.Repositories
             return _context.customers;
         }
 
-      
+        public Customer UpdateCustomer(int id, int numBook, string add)
+        {
+            Customer c = GetById(id);
+            c.NumBooks = numBook;
+            c.Address = add;
+            return c;
+        }
     }
 }
