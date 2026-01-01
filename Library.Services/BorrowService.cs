@@ -20,7 +20,7 @@ namespace Library.Services
 
         public List<Borrow> GetBorrow()
         {
-           return _borrowRepository.GetBorrow();
+            return _borrowRepository.GetBorrow();
         }
 
         public Borrow GetBorrowByBookId(int id)
@@ -30,25 +30,29 @@ namespace Library.Services
 
         public Borrow DeleteBorrow(int bookId)
         {
-            return _borrowRepository.DeleteBorrow(bookId);
+            var b= _borrowRepository.DeleteBorrow(bookId);
+            _borrowRepository.Save();
+            return b;
         }
 
         public Borrow UpdateBorrow(int bookId, int customerId)
         {
-           return _borrowRepository.UpdateBorrow(bookId, customerId);
+            var s = _borrowRepository.UpdateBorrow(bookId, customerId);
+            _borrowRepository.Save();
+            return s;
         }
 
         public bool AddBorrow(Borrow b)
         {
-            var borrow =GetBorrowByBookId(b.BookId);
+            var borrow = GetBorrowByBookId(b.BookId);
             if (borrow == null)
             {
                 _borrowRepository.AddBorrow(b);
+                _borrowRepository.Save();
                 return true;
             }
             return false;
-           
-             
+
         }
     }
 }

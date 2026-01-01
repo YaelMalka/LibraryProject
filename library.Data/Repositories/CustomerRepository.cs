@@ -1,5 +1,6 @@
 ﻿using Libary;
 using Library.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,17 +39,17 @@ namespace Library.Data.Repositories
 
         public Customer GetByBirthday(DateTime birthday)
         {
-            return _context.customers.Find(x => x.Birthday == birthday);
+            return _context.customers.ToList().Find(x => x.Birthday == birthday);
         }
 
         public Customer GetById(int id)
         {
-            return _context.customers.Find(x => x.Id == id);
+            return _context.customers.ToList().Find(x => x.Id == id);
         }
 
         public List<Customer> GetCustomer()
         {
-            return _context.customers;
+            return _context.customers.Include(x => x.books).ToList();  
         }
 
         public Customer UpdateCustomer(int id, int numBook, string add)
@@ -57,6 +58,10 @@ namespace Library.Data.Repositories
             c.NumBooks = numBook;
             c.Address = add;
             return c;
+        }
+        public void Save()
+        {
+            _context.SaveChanges();
         }
     }
 }

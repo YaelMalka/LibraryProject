@@ -22,7 +22,7 @@ builder.Services.AddScoped <IBookService, BookService>();
 builder.Services.AddScoped <ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped <ICustomerService, CustomerService>();  
 
-builder.Services.AddSingleton<DataContext>();
+builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();
 

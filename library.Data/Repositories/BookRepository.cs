@@ -36,17 +36,17 @@ namespace Library.Data.Repositories
 
         public List<Book> GetBooks()
         {
-           return _context.books;
+           return _context.books.ToList();
         }
 
         public Book GetByAuthor(string author)
         {
-            return _context.books.Find(s => s.Author == author);
+            return _context.books.ToList().Find(s => s.Author == author);
         }
 
         public Book GetById(int id)
         {
-            return _context.books.Find(s => s.Id == id);
+            return _context.books.ToList().Find(s => s.Id == id);
         }
 
         public Book UpdateBook(int bookId, bool available)
@@ -54,6 +54,10 @@ namespace Library.Data.Repositories
             Book b = GetById(bookId);
             b.IsAvailable = available;
             return b;             
+        }
+        public void Save()
+        {
+            _context.SaveChanges();
         }
     }
 }

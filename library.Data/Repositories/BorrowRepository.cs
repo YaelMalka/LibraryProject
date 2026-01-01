@@ -1,5 +1,6 @@
 ﻿using Libary;
 using Library.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,12 @@ namespace Library.Data.Repositories
 
         public List<Borrow> GetBorrow()
         {
-            return _context.borrows;
+            return _context.borrows.Include(x=>x.customer).ThenInclude(x=>x.books).ToList();
         }
 
         public Borrow GetBorrowByBookId(int id)
         {
-            return _context.borrows.Find(x => x.BookId == id);
+            return _context.borrows.ToList().Find(x => x.BookId == id);
         }
 
         public Borrow DeleteBorrow(int bookId)
@@ -50,6 +51,10 @@ namespace Library.Data.Repositories
                return true;
             }
             return false;
+        }
+        public void Save()
+        {
+            _context.SaveChanges();
         }
     }
 }

@@ -55,9 +55,9 @@ namespace Libary.Controllers
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Book value)
+        public ActionResult Put(int id, bool isAvailable)
         {
-            var b = _bookService.UpdateBook(id, value.IsAvailable);
+            var b = _bookService.UpdateBook(id,isAvailable);
             if (b == null)
                 return NotFound();
             return Ok(b);

@@ -18,14 +18,18 @@ namespace Library.Services
             _BookRepository = bookRepository;
         }
 
-        public bool AddBook(Book b)
+        public bool AddBook(Book b,Customer c)
         {
-            return _BookRepository.AddBook(b);
+            var x= _BookRepository.AddBook(b);
+            _BookRepository.Save();
+            return x;
         }
 
         public Book DeleteBook(int bookId)
         {
-            return _BookRepository.DeleteBook(bookId);
+            var b= _BookRepository.DeleteBook(bookId);         
+            _BookRepository.Save();
+            return b;
         }
 
         public List<Book> GetBooks()
@@ -45,7 +49,21 @@ namespace Library.Services
 
         public Book UpdateBook(int bookId, bool available)
         {
-            return _BookRepository.UpdateBook(bookId, available);
+            var b= _BookRepository.UpdateBook(bookId, available);
+            _BookRepository.Save();
+            return b;
         }
+        //פונקציה לבדיקת הגבלת ספרים
+        //public bool CheckTime(Customer c)
+        //{
+        //    var cust = GetById(c.Id);
+        //    if (cust != null)
+        //    {
+        //        if (cust.NumBooks < cust.books.Count())
+        //            return true;
+        //    }
+        //    return false;
+        //}
+
     }
 }

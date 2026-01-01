@@ -14,5 +14,7 @@ namespace Library.Core.Services
         public Borrow DeleteBorrow(int bookId);
         public Borrow UpdateBorrow(int bookId,int customerId);
         public bool AddBorrow(Borrow b);
+       
+       
     }
 }

@@ -35,15 +35,18 @@ namespace Library.Services
 
         public Customer DeleteCustomer(int id)
         {
-            //var cust = GetById(id); 
-            //if(cust!=null)
-            return _customerRepository.DeleteCustomer(id);
+           
+            var c= _customerRepository.DeleteCustomer(id);
+            _customerRepository.Save();
+            return c;   
 
         }
 
         public Customer UpdateCustomer(int id, int numBook, string add)
         {
-            return _customerRepository.UpdateCustomer(id, numBook, add);
+            var c = _customerRepository.UpdateCustomer(id, numBook, add);
+            _customerRepository.Save();
+            return c;
         }
 
         public bool AddCustomer(Customer c)
@@ -52,9 +55,12 @@ namespace Library.Services
             if (customer== null)
             {
                 _customerRepository.AddCustomer(c);
+                _customerRepository.Save();
                 return true;
             }
             return false;
+            
         }
+        
     }
 }
