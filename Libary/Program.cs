@@ -1,4 +1,5 @@
 using Libary;
+using Library.Core;
 using Library.Core.Repositories;
 using Library.Core.Services;
 using Library.Data.Repositories;
@@ -23,6 +24,7 @@ builder.Services.AddScoped <ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped <ICustomerService, CustomerService>();  
 
 builder.Services.AddDbContext<DataContext>();
+builder.Services.AddAutoMapper(typeof(MappingProfile),typeof(MappingModels));  
 
 var app = builder.Build();
 

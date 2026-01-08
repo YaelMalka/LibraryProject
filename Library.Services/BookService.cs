@@ -18,7 +18,7 @@ namespace Library.Services
             _BookRepository = bookRepository;
         }
 
-        public bool AddBook(Book b,Customer c)
+        public bool AddBook(Book b)
         {
             var x= _BookRepository.AddBook(b);
             _BookRepository.Save();
