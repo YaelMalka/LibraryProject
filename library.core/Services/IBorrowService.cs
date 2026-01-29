@@ -9,11 +9,11 @@ namespace Library.Core.Services
 {
     public interface IBorrowService
     {
-        public List<Borrow> GetBorrow();
-        public Borrow GetBorrowByBookId(int id);
-        public Borrow DeleteBorrow(int bookId);
-        public Borrow UpdateBorrow(int bookId,int customerId);
-        public bool AddBorrow(Borrow b);
+        public   Task<List<Borrow>> GetBorrowAsync();
+        public  Task<Borrow> GetBorrowByBookIdAsync(int id);
+        public  Task<Borrow> DeleteBorrowAsync(int bookId);
+        public  Task<Borrow> UpdateBorrowAsync(int bookId,int customerId);
+        public  Task<bool> AddBorrowAsync(Borrow b);
        
        
     }

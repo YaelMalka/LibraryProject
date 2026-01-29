@@ -18,16 +18,16 @@ namespace Libary.Controllers
 
         // GET: api/<LibaryController>
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult<Customer>> Get()
         {
-            return Ok(_customerService.GetCustomer());
+            return await Ok(_customerService.GetCustomerAsync());
         }
 
         // GET api/<LibaryController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            var customer = _customerService.GetById(id);
+            var customer = await _customerService.GetByIdAsync(id);
             if (customer == null) {
                 return NotFound();
             }
@@ -36,9 +36,9 @@ namespace Libary.Controllers
 
         // POST api/<LibaryController>
         [HttpPost]
-        public ActionResult Post([FromBody] Customer value)
+        public async Task<ActionResult> Post([FromBody] Customer value)
         {
-            bool ans = _customerService.AddCustomer(value);  
+            bool ans = await _customerService.AddCustomerAsync(value);  
             if (!ans)
             {
                 return Conflict(); // BadRequest
@@ -48,9 +48,9 @@ namespace Libary.Controllers
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Customer value)
+        public async Task<ActionResult> Put(int id, [FromBody] Customer value)
         {     
-            var cust = _customerService.UpdateCustomer(id, value.NumBooks, value.Address);
+            var cust = await _customerService.UpdateCustomerAsync(id, value.NumBooks, value.Address);
             if (cust ==null)
             {
                 return NotFound();
@@ -60,9 +60,9 @@ namespace Libary.Controllers
 
         // DELETE api/<LibaryController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {         
-           var cust= _customerService.DeleteCustomer(id);
+           var cust= await _customerService.DeleteCustomerAsync(id);
             if (cust == null)
             {
                 return NotFound();

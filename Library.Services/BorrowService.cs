@@ -18,37 +18,37 @@ namespace Library.Services
             _borrowRepository = borrowRepository;
         }
 
-        public List<Borrow> GetBorrow()
+        public async Task<List<Borrow>> GetBorrowAsync()
         {
-            return _borrowRepository.GetBorrow();
+            return await _borrowRepository.GetBorrowAsync();
         }
 
-        public Borrow GetBorrowByBookId(int id)
+        public async Task<Borrow>GetBorrowByBookIdAsync(int id)
         {
-            return _borrowRepository.GetBorrowByBookId(id);
+            return await _borrowRepository.GetBorrowByBookIdAsync(id);
         }
 
-        public Borrow DeleteBorrow(int bookId)
+        public async Task<Borrow> DeleteBorrowAsync(int bookId)
         {
-            var b= _borrowRepository.DeleteBorrow(bookId);
-            _borrowRepository.Save();
+            var b= await _borrowRepository.DeleteBorrowAsync(bookId);
+            await _borrowRepository.SaveAsync();
             return b;
         }
 
-        public Borrow UpdateBorrow(int bookId, int customerId)
+        public async Task<Borrow> UpdateBorrowAsync(int bookId, int customerId)
         {
-            var s = _borrowRepository.UpdateBorrow(bookId, customerId);
-            _borrowRepository.Save();
+            var s = await _borrowRepository.UpdateBorrowAsync(bookId, customerId);
+            await _borrowRepository.SaveAsync();
             return s;
         }
 
-        public bool AddBorrow(Borrow b)
+        public async Task<bool> AddBorrowAsync(Borrow b)
         {
-            var borrow = GetBorrowByBookId(b.BookId);
+            var borrow = await GetBorrowByBookIdAsync(b.BookId);
             if (borrow == null)
             {
-                _borrowRepository.AddBorrow(b);
-                _borrowRepository.Save();
+                await _borrowRepository.AddBorrowAsync(b);
+                await _borrowRepository.SaveAsync();
                 return true;
             }
             return false;

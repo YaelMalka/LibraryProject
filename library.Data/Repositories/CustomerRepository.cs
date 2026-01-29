@@ -18,7 +18,7 @@ namespace Library.Data.Repositories
             _context = context;
         }
 
-        public bool AddCustomer(Customer c)
+        public Task<bool> AddCustomerAsync(Customer c)
         {
             if (GetById(c.Id) == null)
             {
@@ -28,40 +28,40 @@ namespace Library.Data.Repositories
             return false;
         }
 
-        public Customer DeleteCustomer(int id)
+        public async Task<Customer> DeleteCustomerAsync(int id)
         {
-            var cust = GetById(id);
+            var cust =await GetByIdAsync(id);
             if (cust != null)
                 _context.customers.Remove(cust);
             return cust;
 
         }
 
-        public Customer GetByBirthday(DateTime birthday)
+        public async Task<Customer> GetByBirthdayAsync(DateTime birthday)
         {
-            return _context.customers.ToList().Find(x => x.Birthday == birthday);
+            return await _context.customers.FirstOrDefaultAsync(x => x.Birthday == birthday);
         }
 
-        public Customer GetById(int id)
+        public async Task<Customer> GetByIdAsync(int id)
         {
-            return _context.customers.ToList().Find(x => x.Id == id);
+            return await _context.customers.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public List<Customer> GetCustomer()
+        public async Task<List<Customer>>GetCustomerAsync()
         {
-            return _context.customers.Include(x => x.books).ToList();  
+            return await _context.customers.Include(x => x.books).ToListAsync();  
         }
 
-        public Customer UpdateCustomer(int id, int numBook, string add)
+        public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add)
         {
-            Customer c = GetById(id);
+            Customer c =await GetByIdAsync(id);
             c.NumBooks = numBook;
             c.Address = add;
             return c;
         }
-        public void Save()
+        public async Task SaveAsync()
         {
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
     }
 }

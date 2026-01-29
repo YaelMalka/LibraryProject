@@ -1,5 +1,6 @@
 ﻿using Libary;
 using Library.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace Library.Data.Repositories
             _context = context;
         }
 
-        public bool AddBook(Book b)
+        public async Task<bool> AddBookAsync(Book b)
         {
-            if(GetById(b.Id)==null)
+            if(await GetByIdAsync(b.Id)==null)
             {
                 _context.books.Add(b);  
                 return true;
@@ -27,37 +28,37 @@ namespace Library.Data.Repositories
             return false;
         }
 
-        public Book DeleteBook(int bookId)
+        public async Task<Book>DeleteBookAsync(int bookId)
         {
-            var b = GetById(bookId);
+            var b =await GetByIdAsync(bookId);
             _context.books.Remove(b);
             return b;
         }
 
-        public List<Book> GetBooks()
+        public async Task<List<Book>> GetBooksAsync()
         {
-           return _context.books.ToList();
+            return await _context.books.ToListAsync();
         }
 
-        public Book GetByAuthor(string author)
+        public async Task<Book> GetByAuthorAsync(string author)
         {
-            return _context.books.ToList().Find(s => s.Author == author);
+            return await _context.books.FirstOrDefaultAsync(s => s.Author == author);
         }
 
-        public Book GetById(int id)
+        public async Task<Book> GetByIdAsync(int id)
         {
-            return _context.books.ToList().Find(s => s.Id == id);
+            return await _context.books.FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public Book UpdateBook(int bookId, bool available)
+        public async Task<Book> UpdateBookAsync(int bookId, bool available)
         {
-            Book b = GetById(bookId);
+            Book b =await GetByIdAsync(bookId);
             b.IsAvailable = available;
             return b;             
         }
-        public void Save()
+        public async Task SaveAsync()
         {
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
     }
 }

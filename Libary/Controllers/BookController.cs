@@ -20,16 +20,16 @@ namespace Libary.Controllers
         }
         // GET: api/<LibaryController>
         [HttpGet]
-        public ActionResult<Book> Get()
+        public async Task<ActionResult<Book>> Get()
         {
-            return Ok(_bookService.GetBooks());
+            return await Ok(_bookService.GetBooksAsync());
         }
 
         // GET api/<LibaryController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            var b = _bookService.GetById(id);
+            var b =await _bookService.GetByIdAsync(id);
             if (b == null)
             {
                 return NotFound();
@@ -45,9 +45,9 @@ namespace Libary.Controllers
 
         // POST api/<LibaryController>
         [HttpPost]
-        public ActionResult Post([FromBody] Book value)
+        public async Task<ActionResult> Post([FromBody] Book value)
         {
-            if (_bookService.AddBook(value))
+            if (await _bookService.AddBookAsync(value))
             {
                 return Ok();
             }
@@ -56,9 +56,9 @@ namespace Libary.Controllers
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, bool isAvailable)
+        public async Task<ActionResult> Put(int id, bool isAvailable)
         {
-            var b = _bookService.UpdateBook(id,isAvailable);
+            var b =await _bookService.UpdateBookAsync(id,isAvailable);
             if (b == null)
                 return NotFound();
             return Ok(b);
@@ -67,9 +67,9 @@ namespace Libary.Controllers
 
         // DELETE api/<LibaryController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var b= _bookService.DeleteBook(id); 
+            var b=await _bookService.DeleteBookAsync(id); 
             if(b == null)
                 return NotFound();
             return Ok(b);

@@ -19,16 +19,16 @@ namespace Libary.Controllers
 
         // GET: api/<KategoryController>
         [HttpGet]
-        public ActionResult<Borrow> Get()
+        public async Task<ActionResult<Borrow>>Get()
         {
-            return Ok( _borrowService.GetBorrow());
+            return await Ok( _borrowService.GetBorrowAsync());
         }
 
         // GET api/<KategoryController>/5
         [HttpGet("{idBook}")]//בדיקת ספר מסוים
-        public ActionResult Get(int idBook)
+        public async Task<ActionResult> Get(int idBook)
         {
-            var book = _borrowService.GetBorrowByBookId(idBook);
+            var book = await _borrowService.GetBorrowByBookIdAsync(idBook);
             if(book==null)
                 return NotFound();
 
@@ -37,9 +37,9 @@ namespace Libary.Controllers
 
         // POST api/<KategoryController>
         [HttpPost]
-        public ActionResult Post([FromBody] Borrow value)
+        public async Task<ActionResult> Post([FromBody] Borrow value)
         {
-            bool ans = _borrowService.AddBorrow(value);
+            bool ans = await _borrowService.AddBorrowAsync(value);
             if (!ans)
             {
                 return Conflict(); // BadRequest
@@ -56,9 +56,9 @@ namespace Libary.Controllers
 
         // DELETE api/<KategoryController>/5
         [HttpDelete("{idbook}")]
-        public ActionResult Delete(int idbook)
+        public async Task<ActionResult> Delete(int idbook)
         {
-            var b = _borrowService.DeleteBorrow(idbook);
+            var b = await _borrowService.DeleteBorrowAsync(idbook);
             if (b == null)
             {
                 return NotFound();

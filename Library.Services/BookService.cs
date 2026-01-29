@@ -18,39 +18,39 @@ namespace Library.Services
             _BookRepository = bookRepository;
         }
 
-        public bool AddBook(Book b)
+        public async Task<bool> AddBookAsync(Book b)
         {
-            var x= _BookRepository.AddBook(b);
-            _BookRepository.Save();
+            var x=await _BookRepository.AddBookAsync(b);
+            await _BookRepository.SaveAsync();
             return x;
         }
 
-        public Book DeleteBook(int bookId)
+        public async Task<Book> DeleteBookAsync(int bookId)
         {
-            var b= _BookRepository.DeleteBook(bookId);         
-            _BookRepository.Save();
+            var b=await _BookRepository.DeleteBookAsync(bookId);
+            await _BookRepository.SaveAsync();
             return b;
         }
 
-        public List<Book> GetBooks()
+        public async Task<List<Book>> GetBooksAsync()
         {
-           return _BookRepository.GetBooks();
+           return await _BookRepository.GetBooksAsync();
         }
 
-        public Book GetByAuthor(string author)
+        public async Task<Book> GetByAuthorAsync(string author)
         {
-           return _BookRepository.GetByAuthor(author);
+           return await _BookRepository.GetByAuthorAsync(author);
         }
 
-        public Book GetById(int id)
+        public async Task<Book> GetByIdAsync(int id)
         {
-            return _BookRepository.GetById(id);
+            return await _BookRepository.GetByIdAsync(id);
         }
 
-        public Book UpdateBook(int bookId, bool available)
+        public async Task<Book> UpdateBookAsync(int bookId, bool available)
         {
-            var b= _BookRepository.UpdateBook(bookId, available);
-            _BookRepository.Save();
+            var b= await _BookRepository.UpdateBookAsync(bookId, available);
+            await _BookRepository.SaveAsync();
             return b;
         }
         //פונקציה לבדיקת הגבלת ספרים
