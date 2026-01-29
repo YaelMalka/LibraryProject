@@ -20,7 +20,7 @@ namespace Libary.Controllers
         [HttpGet]
         public async Task<ActionResult<Customer>> Get()
         {
-            return await Ok(_customerService.GetCustomerAsync());
+            return Ok(await _customerService.GetCustomerAsync());
         }
 
         // GET api/<LibaryController>/5

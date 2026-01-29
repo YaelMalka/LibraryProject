@@ -21,7 +21,7 @@ namespace Libary.Controllers
         [HttpGet]
         public async Task<ActionResult<Borrow>>Get()
         {
-            return await Ok( _borrowService.GetBorrowAsync());
+            return  Ok(await _borrowService.GetBorrowAsync());
         }
 
         // GET api/<KategoryController>/5

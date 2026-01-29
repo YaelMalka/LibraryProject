@@ -52,9 +52,10 @@ namespace Library.Data.Repositories
             }
             return false;
         }
-        public Task SaveAsync()
+
+        public async Task SaveAsync()
         {
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

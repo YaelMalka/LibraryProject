@@ -22,7 +22,7 @@ namespace Libary.Controllers
         [HttpGet]
         public async Task<ActionResult<Book>> Get()
         {
-            return await Ok(_bookService.GetBooksAsync());
+            return  Ok(await _bookService.GetBooksAsync());
         }
 
         // GET api/<LibaryController>/5

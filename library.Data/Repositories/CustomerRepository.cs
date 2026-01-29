@@ -18,9 +18,9 @@ namespace Library.Data.Repositories
             _context = context;
         }
 
-        public Task<bool> AddCustomerAsync(Customer c)
+        public async Task<bool> AddCustomerAsync(Customer c)
         {
-            if (GetById(c.Id) == null)
+            if (await GetByIdAsync(c.Id) == null)
             {
                 _context.customers.Add(c);
                 return true;
