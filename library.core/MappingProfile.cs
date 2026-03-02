@@ -11,8 +11,15 @@ namespace Library.Core
 {
     public class MappingProfile:Profile
     {
-        MappingProfile() { 
-            CreateMap<Borrow,BorrowDTO>().ReverseMap();
+        public MappingProfile() {
+            CreateMap<Borrow, BorrowDTO>()
+             .ForMember(dest => dest.BookIds,
+                        opt => opt.MapFrom(src => src.BorrowBooks.Select(bb => bb.BookId)))
+             .ReverseMap();
+            CreateMap<Customer, CustomerDTO>().ReverseMap();
+
+          
+            CreateMap<Book, BookDTO>().ReverseMap();
         }
         
     }

@@ -1,4 +1,5 @@
-﻿using Library.Core.Services;
+﻿using Library.Core.DTO;
+using Library.Core.Services;
 using Library.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,14 +21,14 @@ namespace Libary.Controllers
         }
         // GET: api/<LibaryController>
         [HttpGet]
-        public async Task<ActionResult<Book>> Get()
+        public async Task<ActionResult<List<Book>>> Get()
         {
-            return await Ok(_bookService.GetBooksAsync());
+            return Ok(await _bookService.GetBooksAsync());
         }
 
         // GET api/<LibaryController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult<Book>> Get(int id)
         {
             var b =await _bookService.GetByIdAsync(id);
             if (b == null)
@@ -45,13 +46,21 @@ namespace Libary.Controllers
 
         // POST api/<LibaryController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Book value)
+        public async Task<ActionResult> Post([FromBody] BookDTO value)
         {
-            if (await _bookService.AddBookAsync(value))
+            var book = new Book
             {
-                return Ok();
+                NameBook = value.NameBook,
+                Author = value.Author,
+                Genre = value.Genre,
+                IsAvailable = true // או מה שאת רוצה כברירת מחדל
+            };
+
+            if (await _bookService.AddBookAsync(book))
+            {
+                return Ok(book); // מחזיר את הספר שנוצר עם Id
             }
-            return NotFound();
+            return BadRequest("Failed to add book");
         }
 
         // PUT api/<LibaryController>/5

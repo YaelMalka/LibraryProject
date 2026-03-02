@@ -18,10 +18,7 @@ namespace Library.Services
             _customerRepository = customerRepository;
         }
 
-        public async Task<Customer> GetByBirthdayAsync(DateTime birthday)
-        {
-            return await _customerRepository.GetByBirthdayAsync(birthday);
-        }
+      
 
         public async Task<Customer> GetByIdAsync(int id)
         {
@@ -36,30 +33,20 @@ namespace Library.Services
         public async Task<Customer> DeleteCustomerAsync(int id)
         {
            
-            var c= _customerRepository.DeleteCustomerAsync(id);
-            await _customerRepository.SaveAsync();
-            return c;   
+            return await _customerRepository.DeleteCustomerAsync(id);
+           
 
         }
 
-        public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add)
+        public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add,int phone)
         {
-            var c = await _customerRepository.UpdateCustomerAsync(id, numBook, add);
-           await _customerRepository.SaveAsync();
-            return c;
+            return await _customerRepository.UpdateCustomerAsync(id, numBook, add,phone);
         }
 
         public async Task<bool> AddCustomerAsync(Customer c)
         {
-            var customer = await GetByIdAsync(c.Id);
-            if (customer== null)
-            {
-                await _customerRepository.AddCustomerAsync(c);
-                await _customerRepository.SaveAsync();
-                return true;
-            }
-            return false;
-            
+            bool result = await _customerRepository.AddCustomerAsync(c);
+            return result;
         }
         
     }

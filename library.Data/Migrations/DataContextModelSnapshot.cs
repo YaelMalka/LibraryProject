@@ -34,9 +34,6 @@ namespace Library.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Genre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -50,8 +47,6 @@ namespace Library.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.ToTable("books");
                 });
 
@@ -62,9 +57,6 @@ namespace Library.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BorrowId"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("BorrowDate")
                         .HasColumnType("datetime2");
@@ -82,10 +74,7 @@ namespace Library.Data.Migrations
             modelBuilder.Entity("Libary.Customer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -101,32 +90,80 @@ namespace Library.Data.Migrations
                     b.Property<int>("NumBooks")
                         .HasColumnType("int");
 
+                    b.Property<int>("Phone")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("customers");
                 });
 
-            modelBuilder.Entity("Libary.Book", b =>
+            modelBuilder.Entity("Library.Core.Models.BorrowBook", b =>
                 {
-                    b.HasOne("Libary.Customer", null)
-                        .WithMany("books")
-                        .HasForeignKey("CustomerId");
+                    b.Property<int>("Number")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Number"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BorrowId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Number");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("BorrowId");
+
+                    b.ToTable("BorrowBook");
                 });
 
             modelBuilder.Entity("Libary.Borrow", b =>
                 {
-                    b.HasOne("Libary.Customer", "customer")
-                        .WithMany()
+                    b.HasOne("Libary.Customer", "Customer")
+                        .WithMany("Borrows")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("customer");
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Library.Core.Models.BorrowBook", b =>
+                {
+                    b.HasOne("Libary.Book", "Book")
+                        .WithMany("BorrowBooks")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Libary.Borrow", "Borrow")
+                        .WithMany("BorrowBooks")
+                        .HasForeignKey("BorrowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Borrow");
+                });
+
+            modelBuilder.Entity("Libary.Book", b =>
+                {
+                    b.Navigation("BorrowBooks");
+                });
+
+            modelBuilder.Entity("Libary.Borrow", b =>
+                {
+                    b.Navigation("BorrowBooks");
                 });
 
             modelBuilder.Entity("Libary.Customer", b =>
                 {
-                    b.Navigation("books");
+                    b.Navigation("Borrows");
                 });
 #pragma warning restore 612, 618
         }

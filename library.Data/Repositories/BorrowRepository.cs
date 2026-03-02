@@ -20,41 +20,40 @@ namespace Library.Data.Repositories
 
         public async Task<List<Borrow>>GetBorrowAsync()
         {
-            return  await _context.borrows.Include(x=>x.customer).ThenInclude(x=>x.books).ToListAsync();
+            return  await _context.borrows.Include(x=>x.Customer).Include(b => b.BorrowBooks)
+                    .ThenInclude(bb => bb.Book)
+                .ToListAsync();
         }
 
         public async Task<Borrow> GetBorrowByBookIdAsync(int id)
         {
-            return await _context.borrows.FirstOrDefaultAsync(x => x.BookId == id);
+            return await _context.borrows
+                 .Include(b => b.Customer)
+                 .Include(b => b.BorrowBooks)
+                     .ThenInclude(bb => bb.Book)
+                 .FirstOrDefaultAsync(b => b.BorrowId ==id);
         }
 
         public async Task<Borrow>DeleteBorrowAsync(int bookId)
         {
-            var b =await GetBorrowByBookIdAsync(bookId);
-            _context.borrows.Remove(b);
-            return b;
-        }
-
-        public async Task<Borrow> UpdateBorrowAsync(int bookId, int customerId)
-        {
-            Borrow b =await GetBorrowByBookIdAsync(bookId);
-            b.BookId = bookId;
-            b.CustomerId = customerId;
-            return b;
+            var borrow = await GetBorrowByBookIdAsync(bookId);
+            if (borrow != null)
+            {
+                _context.borrows.Remove(borrow);
+            }
+            return borrow;
         }
 
         public async Task<bool> AddBorrowAsync(Borrow b)
         {
-            if (await GetBorrowByBookIdAsync(b.BookId) == null)
-            {
-                _context.borrows.Add(b);
-               return true;
-            }
-            return false;
+            _context.borrows.Add(b);
+            return true;
         }
-        public Task SaveAsync()
+        public async Task SaveAsync()
         {
            await _context.SaveChangesAsync();
         }
+
+        
     }
 }

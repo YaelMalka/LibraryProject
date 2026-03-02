@@ -20,9 +20,9 @@ namespace Library.Services
 
         public async Task<bool> AddBookAsync(Book b)
         {
-            var x=await _BookRepository.AddBookAsync(b);
+            bool res =await _BookRepository.AddBookAsync(b);
             await _BookRepository.SaveAsync();
-            return x;
+            return res;
         }
 
         public async Task<Book> DeleteBookAsync(int bookId)
@@ -37,11 +37,6 @@ namespace Library.Services
            return await _BookRepository.GetBooksAsync();
         }
 
-        public async Task<Book> GetByAuthorAsync(string author)
-        {
-           return await _BookRepository.GetByAuthorAsync(author);
-        }
-
         public async Task<Book> GetByIdAsync(int id)
         {
             return await _BookRepository.GetByIdAsync(id);
@@ -53,17 +48,5 @@ namespace Library.Services
             await _BookRepository.SaveAsync();
             return b;
         }
-        //פונקציה לבדיקת הגבלת ספרים
-        //public bool CheckTime(Customer c)
-        //{
-        //    var cust = GetById(c.Id);
-        //    if (cust != null)
-        //    {
-        //        if (cust.NumBooks < cust.books.Count())
-        //            return true;
-        //    }
-        //    return false;
-        //}
-
     }
 }

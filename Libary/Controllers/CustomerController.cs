@@ -1,4 +1,6 @@
-﻿using Library.Core.Services;
+﻿using AutoMapper;
+using Library.Core.DTO;
+using Library.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,16 +13,19 @@ namespace Libary.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
-        public CustomerController(ICustomerService Context)
+        private readonly IMapper _mapper;
+        public CustomerController(ICustomerService Context, IMapper mapper)
         {
             _customerService = Context;
+            _mapper = mapper;
         }
 
         // GET: api/<LibaryController>
         [HttpGet]
         public async Task<ActionResult<Customer>> Get()
         {
-            return await Ok(_customerService.GetCustomerAsync());
+            var customerTask=await _customerService.GetCustomerAsync();
+            return Ok(customerTask);
         }
 
         // GET api/<LibaryController>/5
@@ -36,21 +41,35 @@ namespace Libary.Controllers
 
         // POST api/<LibaryController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Customer value)
+        public async Task<ActionResult> Post([FromBody] CustomerDTO value)
         {
-            bool ans = await _customerService.AddCustomerAsync(value);  
+            // ממפה מ־DTO לאובייקט EF
+            var customer = new Customer
+            {
+                Id = value.Id,
+                Name = value.Name,
+                Birthday = value.Birthday,
+                Address = value.Address,
+                Phone = value.Phone,
+                NumBooks = value.NumBooks,
+                Borrows = new List<Borrow>() // אם רוצים להשאלות בעת יצירה אפשר למלא לפי BorrowIds
+            };
+
+            bool ans = await _customerService.AddCustomerAsync(customer);
             if (!ans)
             {
-                return Conflict(); // BadRequest
-            }     
-            return Ok(value);         
+                return Conflict();
+            }
+
+            // מחזיר את ה־DTO נקי
+            return Ok(value);
         }
 
         // PUT api/<LibaryController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Customer value)
+        public async Task<ActionResult> Put(int id, [FromBody] CustomerDTO value)
         {     
-            var cust = await _customerService.UpdateCustomerAsync(id, value.NumBooks, value.Address);
+            var cust = await _customerService.UpdateCustomerAsync(id, value.NumBooks, value.Address,value.Phone);
             if (cust ==null)
             {
                 return NotFound();

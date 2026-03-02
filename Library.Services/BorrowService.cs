@@ -12,10 +12,11 @@ namespace Library.Services
     public class BorrowService : IBorrowService
     {
         private readonly IBorrowRepository _borrowRepository;
-
-        public BorrowService(IBorrowRepository borrowRepository)
+        private readonly IBookRepository _bookRepository;
+        public BorrowService(IBorrowRepository borrowRepository, IBookRepository bookRepository)
         {
             _borrowRepository = borrowRepository;
+            _bookRepository = bookRepository;
         }
 
         public async Task<List<Borrow>> GetBorrowAsync()
@@ -34,25 +35,17 @@ namespace Library.Services
             await _borrowRepository.SaveAsync();
             return b;
         }
-
-        public async Task<Borrow> UpdateBorrowAsync(int bookId, int customerId)
-        {
-            var s = await _borrowRepository.UpdateBorrowAsync(bookId, customerId);
-            await _borrowRepository.SaveAsync();
-            return s;
-        }
-
         public async Task<bool> AddBorrowAsync(Borrow b)
         {
-            var borrow = await GetBorrowByBookIdAsync(b.BookId);
-            if (borrow == null)
-            {
-                await _borrowRepository.AddBorrowAsync(b);
-                await _borrowRepository.SaveAsync();
-                return true;
+            List<int> list=b.BorrowBooks.Select(x=> x.BookId).ToList();
+            foreach (int bookId in list) {
+                var book =await _bookRepository.GetByIdAsync(bookId);
+                if (book == null || !book.IsAvailable)
+                    return false;
             }
-            return false;
-
+            await _borrowRepository.AddBorrowAsync(b);
+            await _borrowRepository.SaveAsync();
+            return true;
         }
     }
 }

@@ -1,14 +1,18 @@
-﻿namespace Libary
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Libary
 {
     public class Customer
     {
+        [Key]                  
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public DateTime Birthday { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-        public int NumBooks { get; set; }
         public int Phone { get; set; }
-        public  List<Book> books { get; set; }
-
+        public int NumBooks { get; set; }
+        public List<Borrow> Borrows { get; set; }
     }
 }

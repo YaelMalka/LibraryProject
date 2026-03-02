@@ -9,11 +9,10 @@ namespace Library.Core.DTO
 {
     public class BorrowDTO
     {
-        public int BorrowId { get; set; }
-        public int BookId { get; set; }
+        
         public int CustomerId { get; set; }
+        public List<int> BookIds { get; set; }
         public DateTime BorrowDate { get; set; }
-
         public DateTime ReturnDate => BorrowDate.AddDays(30);
     }
 }

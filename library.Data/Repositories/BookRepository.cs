@@ -20,12 +20,9 @@ namespace Library.Data.Repositories
 
         public async Task<bool> AddBookAsync(Book b)
         {
-            if(await GetByIdAsync(b.Id)==null)
-            {
-                _context.books.Add(b);  
-                return true;
-            }
-            return false;
+            _context.books.Add(b);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<Book>DeleteBookAsync(int bookId)
@@ -40,10 +37,7 @@ namespace Library.Data.Repositories
             return await _context.books.ToListAsync();
         }
 
-        public async Task<Book> GetByAuthorAsync(string author)
-        {
-            return await _context.books.FirstOrDefaultAsync(s => s.Author == author);
-        }
+       
 
         public async Task<Book> GetByIdAsync(int id)
         {
