@@ -20,18 +20,16 @@ namespace Library.Data.Repositories
 
         public async Task<bool> AddCustomerAsync(Customer c)
         {
-<<<<<<< HEAD
             _context.customers.Add(c);
             await _context.SaveChangesAsync();
             return true;
-=======
+
             if (await GetByIdAsync(c.Id) == null)
             {
                 _context.customers.Add(c);
                 return true;
             }
             return false;
->>>>>>> 20997490782c4306a258767b2a610d712d931ca8
         }
 
         public async Task<Customer> DeleteCustomerAsync(int id)

@@ -26,13 +26,9 @@ namespace Libary.Controllers
         [HttpGet]
         public async Task<ActionResult<List<BorrowDTO>>>Get()
         {
-<<<<<<< HEAD
             var borrows = await _borrowService.GetBorrowAsync(); // כולל BorrowBooks + Book
             var borrowDtos = _mapper.Map<List<BorrowDTO>>(borrows);
             return Ok(borrowDtos);
-=======
-            return  Ok(await _borrowService.GetBorrowAsync());
->>>>>>> 20997490782c4306a258767b2a610d712d931ca8
         }
 
         // GET api/<KategoryController>/5

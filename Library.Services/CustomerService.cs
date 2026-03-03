@@ -33,14 +33,13 @@ namespace Library.Services
         public async Task<Customer> DeleteCustomerAsync(int id)
         {
            
-<<<<<<< HEAD
+
             return await _customerRepository.DeleteCustomerAsync(id);
            
-=======
+
             var c= await _customerRepository.DeleteCustomerAsync(id);
             await _customerRepository.SaveAsync();
             return c;   
->>>>>>> 20997490782c4306a258767b2a610d712d931ca8
 
         }
 

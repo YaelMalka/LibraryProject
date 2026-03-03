@@ -24,12 +24,8 @@ namespace Libary.Controllers
         [HttpGet]
         public async Task<ActionResult<Customer>> Get()
         {
-<<<<<<< HEAD
             var customerTask=await _customerService.GetCustomerAsync();
             return Ok(customerTask);
-=======
-            return Ok(await _customerService.GetCustomerAsync());
->>>>>>> 20997490782c4306a258767b2a610d712d931ca8
         }
 
         // GET api/<LibaryController>/5
