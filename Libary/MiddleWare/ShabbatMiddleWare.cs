@@ -10,7 +10,7 @@
 
         public async Task Invoke(HttpContext context)
         {
-            if (DayOfWeek.Tuesday == DateTime.Now.DayOfWeek)
+            if (DayOfWeek.Saturday == DateTime.Now.DayOfWeek)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "text/plain; charset=utf-8";
