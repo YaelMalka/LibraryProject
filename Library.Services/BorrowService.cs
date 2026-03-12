@@ -13,10 +13,12 @@ namespace Library.Services
     {
         private readonly IBorrowRepository _borrowRepository;
         private readonly IBookRepository _bookRepository;
-        public BorrowService(IBorrowRepository borrowRepository, IBookRepository bookRepository)
+        private readonly ICustomerRepository _customerRepository;
+        public BorrowService(IBorrowRepository borrowRepository, IBookRepository bookRepository, ICustomerRepository customerRepository)
         {
             _borrowRepository = borrowRepository;
             _bookRepository = bookRepository;
+            _customerRepository = customerRepository;
         }
 
         public async Task<List<Borrow>> GetBorrowAsync()
@@ -37,6 +39,9 @@ namespace Library.Services
         }
         public async Task<bool> AddBorrowAsync(Borrow b)
         {
+          Customer c= await _customerRepository.GetByIdAsync(b.CustomerId);
+            if (c == null) 
+                return false;
             List<int> list=b.BorrowBooks.Select(x=> x.BookId).ToList();
             foreach (int bookId in list) {
                 var book =await _bookRepository.GetByIdAsync(bookId);

@@ -32,15 +32,7 @@ namespace Library.Services
 
         public async Task<Customer> DeleteCustomerAsync(int id)
         {
-           
-
             return await _customerRepository.DeleteCustomerAsync(id);
-           
-
-            var c= await _customerRepository.DeleteCustomerAsync(id);
-            await _customerRepository.SaveAsync();
-            return c;   
-
         }
 
         public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add,int phone)
@@ -50,8 +42,11 @@ namespace Library.Services
 
         public async Task<bool> AddCustomerAsync(Customer c)
         {
-            bool result = await _customerRepository.AddCustomerAsync(c);
-            return result;
+           Customer cust= await _customerRepository.GetByIdAsync(c.Id);
+            if (cust != null)
+                return false;
+            await _customerRepository.AddCustomerAsync(c);
+            return true;
         }
         
     }

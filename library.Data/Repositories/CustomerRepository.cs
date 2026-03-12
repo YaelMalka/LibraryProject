@@ -24,12 +24,6 @@ namespace Library.Data.Repositories
             await _context.SaveChangesAsync();
             return true;
 
-            if (await GetByIdAsync(c.Id) == null)
-            {
-                _context.customers.Add(c);
-                return true;
-            }
-            return false;
         }
 
         public async Task<Customer> DeleteCustomerAsync(int id)
@@ -41,11 +35,6 @@ namespace Library.Data.Repositories
                 await _context.SaveChangesAsync();
             }
             return cust;
-        }
-
-        public async Task<Customer> GetByBirthdayAsync(DateTime birthday)
-        {
-            return await _context.customers.FirstOrDefaultAsync(x => x.Birthday == birthday);
         }
 
         public async Task<Customer> GetByIdAsync(int id)
@@ -61,7 +50,8 @@ namespace Library.Data.Repositories
         public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add,int phone)
         {
             Customer c = await GetByIdAsync(id);
-            if (c == null) return null;
+            if (c == null) 
+                return null;
             c.NumBooks = numBook;
             c.Address = add;
             c.Phone = phone;
