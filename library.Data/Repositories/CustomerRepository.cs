@@ -47,7 +47,7 @@ namespace Library.Data.Repositories
             return await _context.customers.ToListAsync();
         }
 
-        public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add,int phone)
+        public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add, string phone)
         {
             Customer c = await GetByIdAsync(id);
             if (c == null) 

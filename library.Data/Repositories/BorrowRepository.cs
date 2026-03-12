@@ -18,35 +18,48 @@ namespace Library.Data.Repositories
             _context = context;
         }
 
-        public async Task<List<Borrow>>GetBorrowAsync()
+        public async Task<List<Borrow>> GetBorrowAsync()
         {
-            return  await _context.borrows.Include(x=>x.Customer).Include(b => b.BorrowBooks)
+            return await _context.borrows.Include(x => x.Customer).Include(b => b.BorrowBooks)
                     .ThenInclude(bb => bb.Book)
                 .ToListAsync();
         }
 
         public async Task<Borrow> GetBorrowByBookIdAsync(int id)
-        {
+        {       
             return await _context.borrows
-                 .Include(b => b.Customer)
-                 .Include(b => b.BorrowBooks)
-                     .ThenInclude(bb => bb.Book)
-                 .FirstOrDefaultAsync(b => b.BorrowId ==id);
+        .Include(b => b.Customer)
+        .Include(b => b.BorrowBooks)
+            .ThenInclude(bb => bb.Book)
+        .FirstOrDefaultAsync(b => b.BorrowBooks.Any(bb => bb.BookId == id));
         }
 
-        public async Task<Borrow>DeleteBorrowAsync(int bookId)
+        public async Task<Borrow> DeleteBorrowAsync(int bookId)
         {
+
             var borrow = await GetBorrowByBookIdAsync(bookId);
             if (borrow != null)
             {
-                _context.borrows.Remove(borrow);
+                var bookToRemove = borrow.BorrowBooks
+                    .FirstOrDefault(x => x.BookId == bookId);
+
+                if (bookToRemove != null)
+                {
+                    bookToRemove.Book.IsAvailable=true;
+                    borrow.BorrowBooks.Remove(bookToRemove);
+                    if (borrow.BorrowBooks.Count == 0)
+                        _context.Remove(borrow);
+                }
             }
+            await _context.SaveChangesAsync();
             return borrow;
+
         }
 
         public async Task<bool> AddBorrowAsync(Borrow b)
         {
             _context.borrows.Add(b);
+            await _context.SaveChangesAsync();
             return true;
         }
 
@@ -55,6 +68,6 @@ namespace Library.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        
+
     }
 }

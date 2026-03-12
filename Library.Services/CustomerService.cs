@@ -35,7 +35,7 @@ namespace Library.Services
             return await _customerRepository.DeleteCustomerAsync(id);
         }
 
-        public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add,int phone)
+        public async Task<Customer> UpdateCustomerAsync(int id, int numBook, string add, string phone)
         {
             return await _customerRepository.UpdateCustomerAsync(id, numBook, add,phone);
         }

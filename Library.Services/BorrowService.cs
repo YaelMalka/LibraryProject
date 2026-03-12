@@ -33,7 +33,9 @@ namespace Library.Services
 
         public async Task<Borrow> DeleteBorrowAsync(int bookId)
         {
-            var b= await _borrowRepository.DeleteBorrowAsync(bookId);
+
+            var b = await _borrowRepository.DeleteBorrowAsync(bookId);
+
             await _borrowRepository.SaveAsync();
             return b;
         }
@@ -44,11 +46,13 @@ namespace Library.Services
                 return false;
             List<int> list=b.BorrowBooks.Select(x=> x.BookId).ToList();
             foreach (int bookId in list) {
-                var book =await _bookRepository.GetByIdAsync(bookId);
+              var book=await _bookRepository.GetByIdAsync(bookId);
                 if (book == null || !book.IsAvailable)
                     return false;
+                book.IsAvailable = false;
             }
             await _borrowRepository.AddBorrowAsync(b);
+           
             await _borrowRepository.SaveAsync();
             return true;
         }

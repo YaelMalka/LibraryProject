@@ -33,7 +33,7 @@ namespace Library.Data.Migrations
                     Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<int>(type: "int", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumBooks = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
